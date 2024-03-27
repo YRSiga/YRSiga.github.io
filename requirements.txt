@@ -1,3 +1,4 @@
 firebase_admin
 pandas
 scikit-learn
+gunicorn
