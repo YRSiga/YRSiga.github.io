@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realtime and Past Data Viewer</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            background-color: #fff;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        .paginate_button {
+            padding: 6px 12px;
+            margin: 0 2px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .paginate_button:hover {
+            background-color: #f2f2f2;
+        }
+
+        .paginate_button.current {
+            background-color: #ccc;
+        }
+        .data-container {
+        background-color: #f1f1f1;
+        padding: 20px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    .data-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .data-label {
+        font-weight: bold;
+    }
+
+    .data-value {
+        color: #333;
+    }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'realtime')">Realtime Data</button>
+        <button class="tablinks" onclick="openTab(event, 'past')">Past Data</button>
+    </div>
+
+    <div id="realtime" class="tabcontent">
+        <h3>Realtime Data</h3>
+        <div class="data-container">
+            <div class="data-row">
+                <div class="data-label">Timestamp:</div>
+                <div class="data-value" id="timestamp">Loading...</div>
+            </div>
+            <div class="data-row">
+                <div class="data-label">Potassium (K):</div>
+                <div class="data-value" id="potassium">Loading...</div>
+            </div>
+            <div class="data-row">
+                <div class="data-label">Nitrogen (N):</div>
+                <div class="data-value" id="nitrogen">Loading...</div>
+            </div>
+            <div class="data-row">
+                <div class="data-label">Phosphorus (P):</div>
+                <div class="data-value" id="phosphorus">Loading...</div>
+            </div>
+            <div class="data-row">
+                <div class="data-label">Soil Moisture:</div>
+                <div class="data-value" id="soilMoisture">Loading...</div>
+            </div>
+            <div class="data-row">
+                <div class="data-label">EC (Electrical Conductivity):</div>
+                <div class="data-value" id="ec">Loading...</div>
+            </div>
+            <div class="data-row">
+                <div class="data-label">Humidity:</div>
+                <div class="data-value" id="humidity">Loading...</div>
+            </div>
+            <div class="data-row">
+                <div class="data-label">pH:</div>
+                <div class="data-value" id="ph">Loading...</div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="past" class="tabcontent">
+        <h3>Past Data</h3>
+        <div id="pastData">
+            <table id="pastDataTable" class="display">
+                <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>K (Potassium)</th>
+                    <th>N (Nitrogen)</th>
+                    <th>P (Phosphorus)</th>
+                    <th>Soil Moisture</th>
+                    <th>EC (Electrical Conductivity)</th>
+                    <th>Humidity</th>
+                    <th>pH</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Table body will be filled dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    function fetchRealtimeData() {
+        $.get('https://siddhi-project-67c6e-default-rtdb.firebaseio.com/realtime.json', function (data) {
+            if (data) {
+                var keys = Object.keys(data);
+                var latestData = data[keys[keys.length - 1]]; // Get the latest data
+                $('#timestamp').text(keys[keys.length - 1]);
+                $('#potassium').text(latestData['K']);
+                $('#nitrogen').text(latestData['N']);
+                $('#phosphorus').text(latestData['P']);
+                $('#soilMoisture').text(latestData['Soil Moisture']);
+                $('#ec').text(latestData['ec']);
+                $('#humidity').text(latestData['humidity']);
+                $('#ph').text(latestData['ph']);
+            } else {
+                $('.data-value').text('Data not available');
+            }
+        });
+    }
+
+    function fetchPastData() {
+        $.get('https://siddhi-project-67c6e-default-rtdb.firebaseio.com/past.json', function (data) {
+            var html = '';
+            if (data) {
+                html += '<table id="pastDataTable" class="display">';
+                html += '<thead>';
+                html += '<tr>';
+                html += '<th>Timestamp</th>';
+                html += '<th>K (Potassium)</th>';
+                html += '<th>N (Nitrogen)</th>';
+                html += '<th>P (Phosphorus)</th>';
+                html += '<th>Soil Moisture</th>';
+                html += '<th>EC (Electrical Conductivity)</th>';
+                html += '<th>Humidity</th>';
+                html += '<th>pH</th>';
+                html += '</tr>';
+                html += '</thead>';
+                html += '<tbody>';
+                for (var key in data) {
+                    html += '<tr>';
+                    html += '<td>' + key + '</td>'; // Timestamp
+                    html += '<td>' + data[key]['K'] + '</td>'; // Potassium
+                    html += '<td>' + data[key]['N'] + '</td>'; // Nitrogen
+                    html += '<td>' + data[key]['P'] + '</td>'; // Phosphorus
+                    html += '<td>' + data[key]['Soil Moisture'] + '</td>'; // Soil Moisture
+                    html += '<td>' + data[key]['ec'] + '</td>'; // Electrical Conductivity
+                    html += '<td>' + data[key]['humidity'] + '</td>'; // Humidity
+                    html += '<td>' + data[key]['ph'] + '</td>'; // pH
+                    html += '</tr>';
+                }
+                html += '</tbody>';
+                html += '</table>';
+            } else {
+                html += '<p>No data available</p>';
+            }
+            $('#pastData').html(html);
+            $('#pastDataTable').DataTable(); // Initialize DataTable with sorting functionality
+        });
+    }
+
+    function refreshRealtimeData() {
+        fetchRealtimeData();
+        setTimeout(refreshRealtimeData, 5000); // Refresh every 5 seconds
+    }
+
+    function refreshPastData() {
+        fetchPastData();
+        setTimeout(refreshPastData, 9000); // Refresh every 5 seconds
+    }
+
+    // Initial fetch and refresh for realtime data
+    fetchRealtimeData();
+    refreshRealtimeData();
+
+    // Initial fetch and refresh for past data
+    fetchPastData();
+    refreshPastData();
+</script>
+
+</body>
+</html>
