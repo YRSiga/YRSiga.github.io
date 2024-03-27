@@ -98,12 +98,5 @@ recommendations = run_analysis()
 if recommendations:
     for idx, recommendation in enumerate(recommendations):
         print(f"Recommendation {idx+1}:\n{recommendation}")
-        while True:
-            recommendations = run_analysis()
-            if recommendations:
-                for idx, recommendation in enumerate(recommendations):
-                    print(f"Recommendation {idx+1}:\n{recommendation}")
-            time.sleep(30)
-
 
  
