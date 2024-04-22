@@ -73,12 +73,14 @@ def generate_recommendations(df, nutrient_predictions):
 
         # Fertilizer suggestions based on NPK values
         recommendation += "Fertilizer Suggestions:\n"
-        if row['N'] < 10:
+        if row['N'] < 20 or row['N'] > 50:
             recommendation += "- Add nitrogen-rich fertilizers like Urea, Diammonium Phosphate (DAP), or Ammonium Sulphate.\n"
-        if row['P'] < 30:
+        if row['P'] < 5 or row['P'] > 10:
             recommendation += "- Boost phosphorus levels with Single Super Phosphate (SSP), Rock Phosphate, or Bone Meal.\n"
-        if row['K'] < 50:
+        if row['K'] < 7 or row['K'] > 30:
             recommendation += "- Increase potassium with Muriate of Potash (MOP), Sulphate of Potash (SOP), or Potassium Magnesium Sulfate.\n"
+        else:    
+            recommendation += "- No specific fertilizer recommendation needed based on current NPK levels.\n"
 
         recommendations.append(recommendation)
     return recommendations
