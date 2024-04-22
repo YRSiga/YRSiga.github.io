@@ -39,45 +39,46 @@ def generate_recommendations(df, nutrient_predictions):
     recommendations = []
     # Sort data by timestamp and select the latest 3 timestamps
     processed_data = df.sort_values(by='timestamp', ascending=False).head(3)
-    for index, row in processed_data.iterrows():
-        recommendation = f"Timestamp: {row['timestamp']}<br>"
-        recommendation += f"Potassium (K): {row['K']}<br>"
-        recommendation += f"Nitrogen (N): {row['N']}<br>"
-        recommendation += f"Phosphorus (P): {row['P']}<br>"
-        recommendation += f"Soil Moisture: {row['Soil Moisture']}<br>"
-        recommendation += f"EC (Electrical Conductivity): {row['ec']}<br>"
-        recommendation += f"Humidity: {row['humidity']}<br>"
-        recommendation += f"pH: {row['ph']}<br>"
+    for idx, row in enumerate(processed_data.itertuples(), start=1):
+        recommendation = f"<br>Recommendation {idx}:<br>"
+        recommendation += f"<br>Timestamp: {row.timestamp}<br>"
+        recommendation += f"Potassium (K): {row.K}<br>"
+        recommendation += f"Nitrogen (N): {row.N}<br>"
+        recommendation += f"Phosphorus (P): {row.P}<br>"
+        recommendation += f"Soil Moisture: {row[5]}<br>"
+        recommendation += f"EC (Electrical Conductivity): {row.ec}<br>"
+        recommendation += f"Humidity: {row.humidity}<br>"
+        recommendation += f"pH: {row.ph}<br>"
 
         # Nutrient deficiency evaluation
-        if nutrient_predictions[index] == 1:
+        if nutrient_predictions[idx - 1] == 1:
             recommendation += "Your soil might need nutrients. Consider fertilizing your plants.<br>"
         else:
             recommendation += "Your soil nutrient levels seem adequate.<br>"
         
         # Moisture level recommendations
-        if row['Soil Moisture'] < 40:
+        if row[5] < 40:
             recommendation += "Your soil is dry. Consider watering your plants.<br>"
-        elif row['Soil Moisture'] > 60:
+        elif row[5] > 60:
             recommendation += "Your soil is moist. Avoid overwatering.<br>"
         else:
             recommendation += "Your soil moisture levels seem balanced.<br>"
 
         # Crop suggestions based on pH and moisture
-        if row['ph'] < 6.5 and row['Soil Moisture'] > 50:
+        if row.ph < 6.5 and row[5] > 50:
             recommendation += "Suggested crops: Rice, due to suitable soil and high moisture.<br>"
-        elif row['ph'] > 7.0 and row['Soil Moisture'] < 50:
+        elif row.ph > 7.0 and row[5] < 50:
             recommendation += "Suggested crops: Cotton, due to suitable soil and moderate moisture.<br>"
         else:
             recommendation += "Suggested crops: Wheat or Sorghum, which fit well with current soil conditions.<br>"
 
         # Fertilizer suggestions based on NPK values
         recommendation += "Fertilizer Suggestions:<br>"
-        if row['N'] < 20 or row['N'] > 50:
+        if row.N < 20 or row.N > 50:
             recommendation += "- Add nitrogen-rich fertilizers like Urea, Diammonium Phosphate (DAP), or Ammonium Sulphate.<br>"
-        if row['P'] < 5 or row['P'] > 10:
+        if row.P < 5 or row.P > 10:
             recommendation += "- Boost phosphorus levels with Single Super Phosphate (SSP), Rock Phosphate, or Bone Meal.<br>"
-        if row['K'] < 7 or row['K'] > 30:
+        if row.K < 7 or row.K > 30:
             recommendation += "- Increase potassium with Muriate of Potash (MOP), Sulphate of Potash (SOP), or Potassium Magnesium Sulfate.<br>"
         else:    
             recommendation += "- No specific fertilizer recommendation needed based on current NPK levels.<br>"
