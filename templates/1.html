@@ -117,17 +117,6 @@
     .data-value {
         color: #333;
     }
-    .recommendations {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .recommendations p {
-            font-size: 18px;
-            color: #333;
-        }
     </style>
 </head>
 <body>
@@ -199,25 +188,8 @@
         </div>
     </div>
 </div>
-<div class="recommendations">
-{% for idx, recommendation in recommendations %}
-Recommendation {{ idx }}:<br>
-{{ recommendation.replace('\n', '<br>') }}<br>
-{% endfor %}
-    
-</div>
-<button id="refresh-button">Refresh</button>
+
 <script>
-    document.getElementById('refresh-button').addEventListener('click', function() {
-    fetch('/refresh', {
-        method: 'POST'
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Update the page with the new recommendations
-        // This will depend on how your page is structured
-    });
-});
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
