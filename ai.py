@@ -40,6 +40,7 @@ def generate_recommendations(df, nutrient_predictions):
     # Sort data by timestamp and select the latest 2 timestamps
     processed_data = df.sort_values(by='timestamp', ascending=False).head(2)
     for index, row in processed_data.iterrows():
+        recommendation = f"Recommendation<br>"
         recommendation = f"<br>"
         recommendation = f"Timestamp: {row['timestamp']}<br>"
         recommendation += f"Potassium (K): {row['K']}<br>"
