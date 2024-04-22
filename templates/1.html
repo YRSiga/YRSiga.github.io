@@ -200,11 +200,11 @@
     </div>
 </div>
 <div class="recommendations">
-    {% for index, recommendation in enumerate(recommendations) %}
-        <p>recommendation:{{ index + 1 }}</p>
-        <p>{{ recommendation }}</p>
-        <br>
-    {% endfor %}
+{% for idx, recommendation in recommendations %}
+Recommendation {{ idx }}:<br>
+{{ recommendation.replace('\n', '<br>') }}<br>
+{% endfor %}
+    
 </div>
 <button id="refresh-button">Refresh</button>
 <script>
