@@ -40,7 +40,6 @@ def generate_recommendations(df, nutrient_predictions):
     # Sort data by timestamp and select the latest 2 timestamps
     processed_data = df.sort_values(by='timestamp', ascending=False).head(2)
     for index, row in processed_data.iterrows():
-        recommendation += "<br>"
         recommendation = f"Timestamp: {row['timestamp']}<br>"
         recommendation += f"Potassium (K): {row['K']}<br>"
         recommendation += f"Nitrogen (N): {row['N']}<br>"
@@ -81,7 +80,7 @@ def generate_recommendations(df, nutrient_predictions):
         if row['K'] < 7 or row['K'] > 30:
             recommendation += "- Increase potassium with Muriate of Potash (MOP), Sulphate of Potash (SOP), or Potassium Magnesium Sulfate.<br>"
         else:    
-            recommendation += "- No specific fertilizer recommendation needed based on current NPK levels.<br>"
+            recommendation += "- No specific fertilizer recommendation needed based on current NPK levels.<br><br>"
 
         recommendations.append(recommendation)
     return recommendations
