@@ -37,8 +37,8 @@ def predict_nutrient_deficiency(model, X_test):
 # Generate user-friendly recommendations with parameter values
 def generate_recommendations(df, nutrient_predictions):
     recommendations = []
-    # Sort data by timestamp and select the latest 3 timestamps
-    processed_data = df.sort_values(by='timestamp', ascending=False).head(3)
+    # Sort data by timestamp and select the latest 2 timestamps
+    processed_data = df.sort_values(by='timestamp', ascending=False).head(2)
     for index, row in processed_data.iterrows():
         recommendation = f"<br>"
         recommendation = f"Timestamp: {row['timestamp']}<br>"
