@@ -107,5 +107,5 @@ def run_analysis():
 recommendations = run_analysis()
 if recommendations:
     for idx, recommendation in enumerate(recommendations):
-        print(f"Recommendation {idx+1}:")
-        print(recommendation)
+        print(f"Recommendation {idx+1}:<br>")
+        print(recommendation.replace('\n', '<br>'))
