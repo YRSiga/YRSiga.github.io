@@ -40,7 +40,7 @@ def generate_recommendations(df, nutrient_predictions):
     # Sort data by timestamp and select the latest 3 timestamps
     processed_data = df.sort_values(by='timestamp', ascending=False).head(3)
     for index, row in processed_data.iterrows():
-        recommendation = f"Timestamp: {row['timestamp']}\n"
+        recommendation = f"\nTimestamp: {row['timestamp']}\n"
         recommendation += f"Potassium (K): {row['K']}\n"
         recommendation += f"Nitrogen (N): {row['N']}\n"
         recommendation += f"Phosphorus (P): {row['P']}\n"
@@ -84,7 +84,6 @@ def generate_recommendations(df, nutrient_predictions):
 
         recommendations.append(recommendation)
     return recommendations
-
 # Main function to run the analysis and generate recommendations
 def run_analysis():
     data = fetch_data()
@@ -108,4 +107,5 @@ def run_analysis():
 recommendations = run_analysis()
 if recommendations:
     for idx, recommendation in enumerate(recommendations):
-        print(f"Recommendation {idx+1}:\n{recommendation}")
+        print(f"Recommendation {idx+1}:")
+        print(recommendation)
