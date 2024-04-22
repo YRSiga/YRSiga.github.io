@@ -1,15 +1,8 @@
 from sklearn.neighbors import KNeighborsClassifier
-# Train Nutrient Deficiency Prediction model using kNN
-def train_nutrient_model(X_train, y_train, n_neighbors=5):
-    model = KNeighborsClassifier(n_neighbors=n_neighbors)
-    model.fit(X_train, y_train)
-    return model
+from sklearn.model_selection import train_test_split
 import firebase_admin
 from firebase_admin import credentials, db
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-import time
 
 # Initialize Firebase Admin
 cred = credentials.Certificate('cred.json')
@@ -60,7 +53,7 @@ def generate_recommendations(df, nutrient_predictions):
         if nutrient_predictions[index] == 1:
             recommendation += "Your soil might need nutrients. Consider fertilizing your plants.\n"
         else:
-            recommendation += "Your soil nutrient levels seem adequate. No need for additional fertilizers.\n"
+            recommendation += "Your soil nutrient levels seem adequate.\n"
         
         # Moisture level recommendations
         if row['Soil Moisture'] < 40:
@@ -90,7 +83,6 @@ def generate_recommendations(df, nutrient_predictions):
         recommendations.append(recommendation)
     return recommendations
 
-
 # Main function to run the analysis and generate recommendations
 def run_analysis():
     data = fetch_data()
@@ -115,8 +107,3 @@ recommendations = run_analysis()
 if recommendations:
     for idx, recommendation in enumerate(recommendations):
         print(f"Recommendation {idx+1}:\n{recommendation}")
-        while True:
-            recommendations = run_analysis()
-            if recommendations:
-                for idx, recommendation in enumerate(recommendations):
-                    print(f"Recommendation {idx+1}:\n{recommendation}")
