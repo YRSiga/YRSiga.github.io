@@ -199,12 +199,13 @@
         </div>
     </div>
 </div>
-<div class="recommendations">
-    {% for recommendation in recommendations %}
-        <p>{{ recommendation }}</p>
-        <br> 
-    {% endfor %}
-</div>
+    <div class="recommendations">
+        {% for recommendation in recommendations %}
+            <div class="recommendation">
+                {{ recommendation|safe }}
+            </div>
+        {% endfor %}
+    </div>
 <button id="refresh-button">Refresh</button>
 <script>
     document.getElementById('refresh-button').addEventListener('click', function() {
