@@ -7,12 +7,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    recommendations = ai.print_recommend()
+    recommendations = ai.run_analysis()
     return render_template('1.html', recommendations=recommendations)
 
 @app.route('/refresh', methods=['POST'])
 def refresh():
-    recommendations = ai.print_recommend()
+    recommendations = ai.run_analysis()
     return jsonify(recommendations=recommendations)
 
 if __name__ == '__main__':
