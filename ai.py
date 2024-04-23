@@ -135,4 +135,4 @@ def print_recommendations(recommendations):
             print(recommendation.replace('\n', '<br>'))
 # Run the analysis and generate recommendations
 recommendations = run_analysis()
-print_recommendations(recommendations)
+print_recommend= print_recommendations(recommendations)
