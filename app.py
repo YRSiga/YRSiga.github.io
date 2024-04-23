@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    recommendations = ai.run_analysis()
+    recommendations = ai.print_recommendations()
     return render_template('1.html', recommendations=recommendations)
 
 @app.route('/refresh', methods=['POST'])
