@@ -128,11 +128,8 @@ def run_analysis():
     recommendations = generate_recommendations(processed_data, nutrient_predictions)
     
     return recommendations
-def print_recommendations(recommendations):
-    if recommendations:
-        for idx, recommendation in enumerate(recommendations):
-            print(f"Recommendation {idx+1}:<br>")
-            print(recommendation.replace('\n', '<br>'))
-# Run the analysis and generate recommendations
 recommendations = run_analysis()
-print_recommend= print_recommendations(recommendations)
+if recommendations:
+    for idx, recommendation in enumerate(recommendations):
+        print(f"Recommendation {idx+1}:<br>")
+        print(recommendation.replace('\n', '<br>'))
