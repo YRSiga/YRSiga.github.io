@@ -63,23 +63,48 @@ def generate_recommendations(df, nutrient_predictions):
         else:
             recommendation += "Your soil moisture levels seem balanced.<br>"
 
-        # Crop suggestions based on pH and moisture
-        if row['ph'] < 6.5 and row['Soil Moisture'] > 50:
-            recommendation += "Suggested crops: Rice, due to suitable soil and high moisture.<br>"
-        elif row['ph'] > 7.0 and row['Soil Moisture'] < 50:
-            recommendation += "Suggested crops: Cotton, due to suitable soil and moderate moisture.<br>"
+        # Crop suggestions based on N , P and K.
+        if row['N'] < 200 or row['N'] > 250 and row['P'] < 50 or row['P'] > 100 and row['K'] < 150 or row['K'] > 200:
+            recommendation += "--Suggested crops for given soil : <br>"
+            recommendation += "Red Gram (Pigeon Pea),Maize (Corn),Potato,Tomato,Carrot,Cabbage, due to suitable soil and high moisture.<br>"
+
+        elif row['N'] < 150 or row['N'] > 200 and row['P'] < 40 or row['P'] > 80 and row['K'] < 100 or row['K'] > 150:
+            recommendation += "--Suggested crops for given soil : <br>"
+            recommendation += "Cotton,Soybean,Groundnut (Peanut),Sorghum,Chickpea (Garbanzo Bean),Sunflower,Sugarcane, due to suitable soil and moderate moisture.<br>"
         else:
-            recommendation += "Suggested crops: Wheat or Sorghum, which fit well with current soil conditions.<br>"
+            recommendation += "--Suggested crops for given soil : <br>"
+            recommendation += "Wheat or Sorghum, which fit well with current soil conditions.<br>"
+
+
+
+
+
 
         # Fertilizer suggestions based on NPK values
         recommendation += "Fertilizer Suggestions:<br>"
-        if row['N'] < 20 or row['N'] > 50:
+        if (row['N'] < 200 or row['N'] > 250) or (row['P'] < 50 or row['P'] > 100) or (row['K'] < 150 or row['K'] > 200):
+            recommendation += "-- Based on NPK values, crop suggestions are:<br>"
             recommendation += "- Add nitrogen-rich fertilizers like Urea, Diammonium Phosphate (DAP), or Ammonium Sulphate.<br>"
-        if row['P'] < 5 or row['P'] > 10:
             recommendation += "- Boost phosphorus levels with Single Super Phosphate (SSP), Rock Phosphate, or Bone Meal.<br>"
-        if row['K'] < 7 or row['K'] > 30:
             recommendation += "- Increase potassium with Muriate of Potash (MOP), Sulphate of Potash (SOP), or Potassium Magnesium Sulfate.<br>"
-        else:    
+        elif (150 <= row['N'] <= 200) and (40 <= row['P'] <= 80) and (100 <= row['K'] <= 150):
+            recommendation += "-- Based on NPK values, crop suggestions are:<br>"
+            recommendation += "- Use balanced fertilizers like 15-15-15 or 10-20-10 to maintain optimal nutrient levels.<br>"
+            recommendation += "- Additionally, consider applying micronutrient fertilizers such as zinc sulfate or boron to ensure comprehensive soil nutrition.<br>"
+        elif (100 <= row['N'] <= 150) and (30 <= row['P'] <= 60) and (80 <= row['K'] <= 120):
+            recommendation += "-- Based on NPK values, crop suggestions are:<br>"
+            recommendation += "- Apply organic fertilizers like compost, manure, or biochar to improve soil structure and fertility.<br>"
+            recommendation += "- Use slow-release fertilizers to provide nutrients gradually over time and reduce nutrient leaching.<br>"
+        elif (50 <= row['N'] <= 100) and (20 <= row['P'] <= 50) and (50 <= row['K'] <= 100):
+            recommendation += "-- Based on NPK values, crop suggestions are:<br>"
+            recommendation += "- Utilize green manure crops to fix nitrogen and improve soil organic matter content.<br>"
+            recommendation += "- Apply phosphorus-rich organic fertilizers such as bone meal or fish emulsion to boost root development.<br>"
+        elif (20 <= row['N'] <= 50) and (10 <= row['P'] <= 30) and (30 <= row['K'] <= 70):
+            recommendation += "-- Based on NPK values, crop suggestions are:<br>"
+            recommendation += "- Implement crop rotation to naturally replenish soil nutrients and break pest cycles.<br>"
+            recommendation += "- Use mulching techniques to conserve soil moisture and suppress weed growth.<br>"
+        else:
+            recommendation += "-- Based on NPK values, crop suggestions are:<br>"
             recommendation += "- No specific fertilizer recommendation needed based on current NPK levels.<br><br>"
 
         recommendations.append(recommendation)
