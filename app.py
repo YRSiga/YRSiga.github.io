@@ -12,7 +12,7 @@ def home():
 
 @app.route('/refresh', methods=['POST'])
 def refresh():
-    recommendations = ai.run_analysis()
+    recommendations = ai.print_recommendations()
     return jsonify(recommendations=recommendations)
 
 if __name__ == '__main__':
